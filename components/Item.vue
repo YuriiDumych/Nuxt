@@ -2,7 +2,7 @@
   <div class="album-item">
     <button class="btn btn-sm text-danger x-btn" @click="deletePhoto(photo.id)">&times;</button>
     <img :src="photo.thumbnailUrl" alt />
-    <p>{{ photo.title }}</p>
+    <p class="mt-3">{{ photo.title }}</p>
   </div>
 </template>
 
@@ -25,7 +25,6 @@ export default {
   padding: 30px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
 }
 .album-item img {

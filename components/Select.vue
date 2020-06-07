@@ -1,11 +1,11 @@
 <template>
   <div class="select-box mt-5 mb-2">
-    <select @change="onChange($event)" class="form-control">
+    <select @change="onChange" class="form-control">
       <option>--</option>
       <option v-for="album of albums" :key="album.id" :value="album.id">{{ album.title }}</option>
     </select>
-    <button class="btn btn-primary add-album-btn my-3" @click="toggleModal()">Add Album</button>
-    <AddAlbumModal v-if="openModal" @toggle="toggleModal()" />
+    <button class="btn btn-primary add-album-btn my-3" @click="toggleModal">Add Album</button>
+    <AddAlbumModal v-if="openModal" @toggle="toggleModal" />
   </div>
 </template>
 

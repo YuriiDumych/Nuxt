@@ -1,14 +1,11 @@
 <template>
   <div>
-    <button
-      class="btn btn-primary add-photo-btn"
-      v-if="currentAlbum"
-      @click="toggleModal()"
-    >Add Photo</button>
-    <div class="album-box" v-if="photos.length">
+    <button class="btn btn-primary add-photo-btn" v-if="currentAlbum" @click="toggleModal">Add Photo</button>
+    <div class="album-box" v-if="photos">
       <Item v-for="photo of photos" :key="photo.id" :photo="photo" />
     </div>
-    <AddPhotoModal v-if="openModal" @toggle="toggleModal()" />
+    <div class="alert alert-primary my-2" v-if="currentAlbum && !photos.length">Album is empty</div>
+    <AddPhotoModal v-if="openModal" @toggle="toggleModal" />
   </div>
 </template>
 

@@ -9,7 +9,7 @@
             class="close"
             data-dismiss="modal"
             aria-label="Close"
-            @click="toggle()"
+            @click="toggle"
           >
             <span aria-hidden="true">&times;</span>
           </button>
@@ -24,23 +24,25 @@
                   hidden
                   accept=".jpg, .jpeg, .gif, .png, .svg"
                   class="form-control my-2"
-                  @change="changeFileInput($event)"
+                  @change="changeFileInput"
                 />
               </label>
               <img v-if="thumbnailUrl" :src="thumbnailUrl" alt="alt" />
             </div>
             <div class="form-group">
-              <input type="text" placeholder="Title" class="form-control my-2" v-model="title" />
+              <input
+                type="text"
+                placeholder="Title"
+                class="form-control my-2"
+                v-model="title"
+                @input="resetError"
+              />
             </div>
           </form>
         </div>
+        <div class="alert alert-danger" v-if="error">{{ error }}</div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-            @click="toggle()"
-          >Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="toggle">Close</button>
           <button
             type="submit"
             class="btn btn-primary"
@@ -57,24 +59,40 @@ export default {
   data() {
     return {
       thumbnailUrl: "",
-      title: ""
+      title: "",
+      error: ""
     };
+  },
+  computed: {
+    photos() {
+      return this.$store.getters["photos"];
+    }
   },
   methods: {
     toggle() {
       this.$emit("toggle");
+    },
+    resetError() {
+      if (this.error) {
+        this.error = "";
+      }
     },
     changeFileInput(e) {
       const file = e.target.files[0];
       this.thumbnailUrl = URL.createObjectURL(file);
     },
     handleSubmit(e) {
-      this.$store.dispatch("addPhoto", {
-        title: this.title,
-        thumbnailUrl: this.thumbnailUrl,
-        id: Math.round(Math.random() * 10e5)
-      });
-      this.$emit("toggle");
+      const index = this.photos.findIndex(i => i.title == this.title);
+      if (index > -1) {
+        this.error = "Photo already exists";
+      } else {
+        this.$store.dispatch("addPhoto", {
+          title: this.title,
+          thumbnailUrl: this.thumbnailUrl,
+          id: Math.round(Math.random() * 10e5)
+        });
+        this.$emit("toggle");
+      }
     }
   }
 };
